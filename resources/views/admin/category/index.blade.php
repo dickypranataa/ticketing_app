@@ -1,0 +1,148 @@
+<x-layouts.admin title="Manajemen Kategori">
+
+    {{-- notifikasi sukses --}}
+    @if (session('success'))
+    <div class="toast toast-bottom toast-center">
+        <div class="alert alert-success">
+            <span>{{ session('success') }}</span>
+        </div>
+    </div>
+
+    <script>
+        setTimeout(() => {
+            document.querySelector('.toast')?.remove()
+        }, 3000)
+    </script>
+    @endif
+
+    <div class="container mx-auto p-10">
+        <div class="flex">
+            <h1 class="text-3xl font-semibold mb-4">Manajemen Kategori</h1>
+            <button class="btn btn-primary ml-auto" onclick="add_modal.showModal()">Tambah Kategori</button>
+        </div>
+        <div class="overflow-x-auto rounded-box bg-white p-5 shadow-xs">
+            <table class="table">
+                <!-- head -->
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th class="w-3/4">Nama Kategori</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{--Tabel Kategori --}}
+                    {{-- @forelse digunakan untuk melakukan perulangan data kategori --}}
+                    {{-- Atribut data-id dan data-nama digunakan untuk --}}
+                    {{-- Mengirim data kategori ke JavaScript & Mengisi modal edit dan delete secara dinamis--}}
+                    @forelse ($categories as $index => $category)
+                    <tr>
+                        <th>{{ $index + 1 }}</th>
+                        <td>{{ $category->nama }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary mr-2" onclick="openEditModal(this)" data-id="{{ $category->id }}" data-nama="{{ $category->nama }}">Edit</button>
+                            <button class="btn btn-sm bg-red-500 text-white" onclick="openDeleteModal(this)" data-id="{{ $category->id }}">Hapus</button>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="3" class="text-center">Tidak ada kategori tersedia.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add Category Modal -->
+    {{-- Post untuk create data baru --}}
+    <dialog id="add_modal" class="modal">
+        <form method="POST" action="{{ route('admin.categories.store') }}" class="modal-box">
+            @csrf
+            <h3 class="text-lg font-bold mb-4">Tambah Kategori</h3>
+            <div class="form-control w-full mb-4">
+                <label class="label mb-2">
+                    <span class="label-text">Nama Kategori</span>
+                </label>
+                <input type="text" placeholder="Masukkan nama kategori" class="input input-bordered w-full" name="nama" required />
+            </div>
+            <div class="modal-action">
+                <button class="btn btn-primary" type="submit">Simpan</button>
+                <button class="btn" onclick="add_modal.close()" type="reset">Batal</button>
+            </div>
+        </form>
+    </dialog>
+
+    <!-- Edit Category Modal With Retrieve ID -->
+    {{-- PUT untuk mengedit data di database --}}
+    <dialog id="edit_modal" class="modal">
+        <form method="POST" class="modal-box">
+            @csrf
+            @method('PUT')
+
+            <input type="hidden" name="category_id" id="edit_category_id">
+
+            <h3 class="text-lg font-bold mb-4">Edit Kategori</h3>
+            <div class="form-control w-full mb-4">
+                <label class="label mb-2">
+                    <span class="label-text">Nama Kategori</span>
+                </label>
+                <input type="text" placeholder="Masukkan nama kategori" class="input input-bordered w-full" value="Kategori Contoh" id="edit_category_name" name="nama" />
+            </div>
+            <div class="modal-action">
+                <button class="btn btn-primary" type="submit">Simpan</button>
+                <button class="btn" onclick="edit_modal.close()" type="reset">Batal</button>
+            </div>
+        </form>
+    </dialog>
+
+    <!-- Delete Modal -->
+    {{-- method delet untuk menghapus data ke database --}}
+    <dialog id="delete_modal" class="modal">
+        <form method="POST" class="modal-box">
+            @csrf
+            @method('DELETE')
+
+            <input type="hidden" name="category_id" id="delete_category_id">
+
+            <h3 class="text-lg font-bold mb-4">Hapus Kategori</h3>
+            <p>Apakah Anda yakin ingin menghapus kategori ini?</p>
+            <div class="modal-action">
+                <button class="btn btn-primary" type="submit">Hapus</button>
+                <button class="btn" onclick="delete_modal.close()" type="reset">Batal</button>
+            </div>
+        </form>
+    </dialog>
+
+    <script>
+        //Mengambil data kategori dari tombol (data-id, data-nama)
+        // Mengisi field input pada modal edit & delete
+        //Menentukan endpoint update dan delete secara dinamis
+        function openEditModal(button) {
+            const name = button.dataset.nama;
+            const id = button.dataset.id;
+            const form = document.querySelector('#edit_modal form');
+
+            document.getElementById("edit_category_name").value = name;
+            document.getElementById("edit_category_id").value = id;
+
+            // Set action dengan parameter ID
+            form.action = `/admin/categories/${id}`
+
+            edit_modal.showModal();
+        }
+
+        function openDeleteModal(button) {
+            const id = button.dataset.id;
+            const form = document.querySelector('#delete_modal form');
+            document.getElementById("delete_category_id").value = id;
+
+            // Set action dengan parameter ID
+            form.action = `/admin/categories/${id}`
+
+            delete_modal.showModal();
+        }
+    </script>
+
+
+</x-layouts.admin>
