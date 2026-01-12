@@ -4,6 +4,9 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\Admin\TiketController;
+use App\Http\Controllers\Admin\HistoriesController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,6 +26,16 @@ Route::middleware('auth')->group(function () {
 
         // manajemen kategori
         Route::resource('categories', CategoryController::class);
+
+        // manajemen event
+        Route::resource('events', EventController::class);
+
+        // manajemen tiket
+        Route::resource('tickets', TiketController::class);
+
+        // manajemen histori pemesanan
+        Route::get('/histories', [HistoriesController::class, 'index'])->name('histories.index');
+        Route::get('/histories/{id}', [HistoriesController::class, 'show'])->name('histories.show');
     });
 });
 
