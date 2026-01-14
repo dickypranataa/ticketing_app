@@ -13,10 +13,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //mengambil semua data kategori
-        //$categories menyimpan data kategori dalam bentuk collection
         $categories = Kategori::all();
-        //mengirim data kategori ke view admin.category.index
         return view('admin.category.index', compact('categories'));
     }
 
@@ -34,17 +31,14 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //validasi input nama harus diisi
         $payload = $request->validate([
             'nama' => 'required|string|max:255',
         ]);
 
-        //pengecekan tambahan kategori
         if (!isset($payload['nama'])) {
             return redirect()->route('categories.index')->with('error', 'Nama kategori wajib diisi.');
         }
 
-        //menyimpan data kategori baru ke database
         Kategori::create([
             'nama' => $payload['nama'],
         ]);
@@ -73,19 +67,16 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //validasi input nama harus diisi (string maksimal 255 karakter)
         $payload = $request->validate([
             'nama' => 'required|string|max:255',
         ]);
-        //pengecekan tambahan kategori
+        
         if (!isset($payload['nama'])) {
             return redirect()->route('categories.index')->with('error', 'Nama kategori wajib diisi.');
         }
-        //mengambil data kategori berdasarkan id (jika tidak ditemukan akan menampilkan error 404)
+
         $category = Kategori::findOrFail($id);
-        //mengubah nilai nama data kategori
         $category->nama = $payload['nama'];
-        //menyimpan perubahan data kategori ke database
         $category->save();
 
         return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil diperbarui.');
@@ -96,7 +87,6 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        //mencari dan menghapus data kategori berdasarkan id
         Kategori::destroy($id);
         return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil dihapus.');
     }

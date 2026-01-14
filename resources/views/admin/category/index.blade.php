@@ -32,9 +32,6 @@
                 </thead>
                 <tbody>
                     {{--Tabel Kategori --}}
-                    {{-- @forelse digunakan untuk melakukan perulangan data kategori --}}
-                    {{-- Atribut data-id dan data-nama digunakan untuk --}}
-                    {{-- Mengirim data kategori ke JavaScript & Mengisi modal edit dan delete secara dinamis--}}
                     @forelse ($categories as $index => $category)
                     <tr>
                         <th>{{ $index + 1 }}</th>

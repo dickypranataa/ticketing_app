@@ -28,8 +28,7 @@ class Order extends Model
 
     public function tikets()
     {
-        return $this->belongsToMany(Tiket::class, 'detail_orders')
-            ->withPivot('jumlah', 'subtotal_harga');
+        return $this->belongsToMany(Tiket::class, 'detail_orders')->withPivot('jumlah', 'subtotal_harga');
     }
 
     public function event()

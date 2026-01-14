@@ -58,7 +58,7 @@ class EventController extends Controller
     }
 
     /**
-     * Menampilkan data event.
+     * .
      */
     public function show(string $id)
     {
