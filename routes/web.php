@@ -28,9 +28,6 @@ Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
 Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
