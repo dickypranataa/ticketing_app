@@ -16,11 +16,13 @@ class DetailOrder extends Model
         'subtotal_harga',
     ];
 
+    //1 detail order hanya untuk 1 order
     public function order()
     {
         return $this->belongsTo(Order::class);
     }
 
+    //1 detail order hanya untuk 1 tiket
     public function tiket()
     {
         return $this->belongsTo(Tiket::class);

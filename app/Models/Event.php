@@ -23,16 +23,19 @@ class Event extends Model
         'tanggal_waktu' => 'datetime',
     ];
 
+    //1 event bisa memiliki banyak tiket
     public function tikets()
     {
         return $this->hasMany(Tiket::class);
     }
 
+    //1 event hanya memiliki 1 kategori
     public function kategori()
     {
         return $this->belongsTo(Kategori::class);
     }
 
+    //1 event hanya dibuat oleh 1 user
     public function user()
     {
         return $this->belongsTo(User::class);

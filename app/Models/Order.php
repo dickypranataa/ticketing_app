@@ -21,11 +21,13 @@ class Order extends Model
         'total_harga',
     ];
 
+    //1 order hanya dibuat oleh 1 user
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    //1 order bisa dimiliki banyak jenis tiket melalui detail order
     public function tikets()
     {
         return $this->belongsToMany(Tiket::class, 'detail_orders')->withPivot('jumlah', 'subtotal_harga');

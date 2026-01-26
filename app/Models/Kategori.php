@@ -13,6 +13,7 @@ class Kategori extends Model
         'nama',
     ];
 
+    //1 kategori bisa terdapat di banyak event
     public function events()
     {
         return $this->hasMany(Event::class);
